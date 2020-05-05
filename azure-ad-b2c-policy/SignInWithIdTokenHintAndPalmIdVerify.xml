@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TrustFrameworkPolicy
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="redrockbiometricsdemo.onmicrosoft.com"
+  PolicyId="B2C_1A_signinwithidtoken_and_palmidverify"
+  DeploymentMode="Development"
+  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
+  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signinwithidtoken_and_palmidverify">
+
+  <BasePolicy>
+    <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
+  </BasePolicy>
+
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="trx_id">
+        <DisplayName>Transaction ID</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Specifies transaction ID for PalmID Approval.</AdminHelpText>
+        <UserHelpText>Specifies transaction ID for PalmID Approval.</UserHelpText>
+      </ClaimType>
+      <!--Sample: Stores the error message for unsolicited request (a request without id_token_hint) and user not found-->
+      <ClaimType Id="errorMessage">
+        <DisplayName>Error</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+
+      <ClaimType Id="idHintObjectId">
+        <DisplayName>idHintObjectId</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>idHintObjectId</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateUnsolicitedErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You cannot sign-in without invitation. Please click the link in the email" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateUserNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You aren't registered in the system! Please contact the Help Desk on 0800 xxx yyy and ask to be added to the system" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateUserPalmIdNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You aren't linked with PalmID! Please contact the Help Desk on 0800 xxx yyy and ask to be added to the system" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+
+      <ClaimsTransformation Id="CreateUserPalmIdNotErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Your action has not been approved by PalmID" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>ID Token Hint ClaimsProvider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="IdTokenHint_ExtractClaims">
+          <DisplayName>ID Token Hint TechnicalProfile</DisplayName>
+          <Protocol Name="None" />
+          <Metadata>
+            <!-- In example we use id_token from B2C_1A_signup_signin as id_token_hint -->
+            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin/v2.0/.well-known/openid-configuration</Item>
+          </Metadata>
+          <OutputClaims></OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Demo: Show error message-->
+        <TechnicalProfile Id="SelfAsserted-Error">
+          <DisplayName>Unsolicited error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Sample: Remove the continue button-->
+            <Item Key="setting.showContinueButton">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage"/>
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage"/>
+          </OutputClaims>
+        </TechnicalProfile>
+
+        <!-- Demo: Show unsolicited error message-->
+        <TechnicalProfile Id="SelfAsserted-Unsolicited">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUnsolicitedErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+
+        <!-- Demo: Show user not found error message-->
+        <TechnicalProfile Id="SelfAsserted-UserNotFound">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserNotFoundErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-UserPalmIdNotFound">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserPalmIdNotFoundErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="SelfAsserted-UserPalmIdNot">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserPalmIdNotErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+
+        <TechnicalProfile Id="AAD-UserReadUsingIdHintObjectId">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="idHintObjectId" PartnerClaimType="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+
+  <UserJourneys>
+    <UserJourney Id="SignInWithIdTokenAndPalmIdVerify">
+      <OrchestrationSteps>
+        <!-- Read the input claims from the id_token_hint -->
+        <OrchestrationStep Order="1" Type="GetClaims" CpimIssuerTechnicalProfileReferenceId="IdTokenHint_ExtractClaims" />
+
+        <!-- Check if policy doesn't have valid id_token_hint -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>idHintObjectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAsserted-Unsolicited" TechnicalProfileReferenceId="SelfAsserted-Unsolicited" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Read the extension_palmIdUserId from the directory by idHintObjectId-->
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadUsingIdHintObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingIdHintObjectId"/>
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check whether the user not existed in the directory -->
+        <OrchestrationStep Order="4" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>objectId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedUserNotFound" TechnicalProfileReferenceId="SelfAsserted-UserNotFound" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Check whether the user does not have extension_palmIdUserId -->
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <Preconditions>
+            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
+              <Value>extension_palmIdUserId</Value>
+              <Action>SkipThisOrchestrationStep</Action>
+            </Precondition>
+          </Preconditions>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SelfAssertedUserPalmIdNotFound" TechnicalProfileReferenceId="SelfAsserted-UserPalmIdNotFound" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Run PalmID OIDC with login_hint and assert response sub is equal to extension_palmIdUserId -->
+        <OrchestrationStep Order="6" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="VerifyPalmIDExchange" TechnicalProfileReferenceId="PalmID-OIDC-Verify" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <!-- Issue an access token-->
+        <OrchestrationStep Order="7" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer"/>
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb"/>
+    </UserJourney>
+  </UserJourneys>
+
+  <RelyingParty>
+    <DefaultUserJourney ReferenceId="SignInWithIdTokenAndPalmIdVerify" />
+
+    <UserJourneyBehaviors>
+      <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="f46a9c7c-a490-4de5-a187-7972e83987a5"
+        DeveloperMode="true" ClientEnabled="false"
+        ServerEnabled="true" TelemetryVersion="1.0.0" />
+    </UserJourneyBehaviors>
+
+    <TechnicalProfile Id="PolicyProfile">
+      <DisplayName>PolicyProfile</DisplayName>
+      <Protocol Name="OpenIdConnect" />
+      <!--Set idHintObjectId to be read from the id_token_hint's sub claim-->
+      <InputClaims>
+        <InputClaim ClaimTypeReferenceId="idHintObjectId" PartnerClaimType="sub" />
+      </InputClaims>
+      <OutputClaims>
+        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+        <OutputClaim ClaimTypeReferenceId="trx_id" DefaultValue="{oauth-kv:trx_id}" AlwaysUseDefaultValue="true"/>
+      </OutputClaims>
+      <SubjectNamingInfo ClaimType="sub" />
+    </TechnicalProfile>
+  </RelyingParty>
+</TrustFrameworkPolicy>

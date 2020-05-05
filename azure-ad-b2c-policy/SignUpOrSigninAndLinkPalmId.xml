@@ -2,7 +2,7 @@
 <TrustFrameworkPolicy
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="redrockbiometricsdemo.onmicrosoft.com" PolicyId="B2C_1A_signup_signin" PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin" TenantObjectId="9e0c300f-8b0a-49bb-908c-e837280665f4">
+    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="redrockbiometricsdemo.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_palmid" PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid" TenantObjectId="9e0c300f-8b0a-49bb-908c-e837280665f4">
 
   <BasePolicy>
     <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
@@ -10,7 +10,7 @@
   </BasePolicy>
 
   <UserJourneys>
-    <UserJourney Id="SignUpOrSignIn">
+    <UserJourney Id="SignUpOrSignInAndLinkPalmId">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
@@ -137,7 +137,7 @@
   </UserJourneys>
 
   <RelyingParty>
-      <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+      <DefaultUserJourney ReferenceId="SignUpOrSignInAndLinkPalmId" />
       <UserJourneyBehaviors>
           <SingleSignOn Scope="Tenant" KeepAliveInDays="30" />
           <SessionExpiryType>Absolute</SessionExpiryType>

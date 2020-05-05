@@ -1,22 +1,29 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="redrockbiometricsdemo.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkBase" PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_TrustFrameworkBase">
 
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="extension_palmIdUserId">
+        <DisplayName>extension_palmIdUserId</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>extension_palmIdUserId</AdminHelpText>
+        <UserHelpText>extension_palmIdUserId</UserHelpText>
+      </ClaimType>
+
       <!-- The ClaimsSchema is divided into three sections:
            1. Section I lists the minimum claims that are required for the user journeys to work properly.
-           2. Section II lists the claims required for query string parameters and other special parameters 
-              to be passed to other claims providers, esp. login.microsoftonline.com for authentication. 
+           2. Section II lists the claims required for query string parameters and other special parameters
+              to be passed to other claims providers, esp. login.microsoftonline.com for authentication.
               Please do not modify these claims.
-           3. Section III lists any additional (optional) claims that can be collected from the user, stored 
-              in the directory and sent in tokens during sign in. Add new claims to be collected from the user 
+           3. Section III lists any additional (optional) claims that can be collected from the user, stored
+              in the directory and sent in tokens during sign in. Add new claims to be collected from the user
               and/or sent in the token in Section III. -->
 
-      <!-- NOTE: The claims schema contains restrictions on certain claims such as passwords and usernames. 
-           The trust framework policy treats Azure AD as any other claims provider and all its restrictions 
-           are modelled in the policy. A policy could be modified to add more restrictions, or use another 
+      <!-- NOTE: The claims schema contains restrictions on certain claims such as passwords and usernames.
+           The trust framework policy treats Azure AD as any other claims provider and all its restrictions
+           are modelled in the policy. A policy could be modified to add more restrictions, or use another
            claims provider for credential storage which will have its own restrictions. -->
 
       <!-- SECTION I: Claims required for user journeys to work properly -->
@@ -43,6 +50,12 @@
         <UserHelpText>Object identifier (ID) of the user object in Azure AD.</UserHelpText>
       </ClaimType>
 
+      <ClaimType Id="idTokenObjectId">
+        <DisplayName>User's Object ID from id_token_hint</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Object identifier (ID) of the user object in Azure AD.</UserHelpText>
+      </ClaimType>
+
       <!-- Claims needed for local accounts. -->
       <ClaimType Id="signInName">
         <DisplayName>Sign in name</DisplayName>
@@ -57,7 +70,7 @@
         <UserHelpText>Email address to use for signing in.</UserHelpText>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-	  
+
       <ClaimType Id="accountEnabled">
         <DisplayName>Account Enabled</DisplayName>
         <DataType>boolean</DataType>
@@ -72,9 +85,9 @@
         <UserInputType>Password</UserInputType>
       </ClaimType>
 
-      <!-- The claim types newPassword and reenterPassword are considered special, please do not change the names. 
-           The UI validates the the user correctly re-entered their password during account creation based on these 
-           claim types.	  -->
+      <!-- The claim types newPassword and reenterPassword are considered special, please do not change the names.
+           The UI validates the the user correctly re-entered their password during account creation based on these
+           claim types.   -->
       <ClaimType Id="newPassword">
         <DisplayName>New Password</DisplayName>
         <DataType>string</DataType>
@@ -180,13 +193,6 @@
         <UserHelpText>issuerUserIdToLink</UserHelpText>
       </ClaimType>
 
-      <ClaimType Id="trx_id">
-        <DisplayName>Transaction ID</DisplayName>
-        <DataType>string</DataType>
-        <AdminHelpText>Specifies transaction ID for PalmID Approval.</AdminHelpText>
-        <UserHelpText>Specifies transaction ID for PalmID Approval.</UserHelpText>
-      </ClaimType>
-
       <ClaimType Id="sub">
         <DisplayName>Subject</DisplayName>
         <DataType>string</DataType>
@@ -269,13 +275,6 @@
       </ClaimType>
 
       <!-- SECTION II: Claims required to pass on special parameters (including some query string parameters) to other claims providers -->
-
-      <ClaimType Id="login_hint">
-        <DisplayName>login_hint</DisplayName>
-        <DataType>string</DataType>
-        <AdminHelpText>Login hint for OIDC.</AdminHelpText>
-        <UserHelpText>Login hint for OIDC.</UserHelpText>
-      </ClaimType>
 
       <ClaimType Id="client_id">
         <DisplayName>client_id</DisplayName>
@@ -448,7 +447,7 @@
           <OutputClaim ClaimTypeReferenceId="issuers" TransformationClaimType="issuersCollection" />
         </OutputClaims>
       </ClaimsTransformation>
- 
+
       <ClaimsTransformation Id="AssertAccountEnabledIsTrue" TransformationMethod="AssertBooleanClaimIsEqualToValue">
         <InputClaims>
           <InputClaim ClaimTypeReferenceId="accountEnabled" TransformationClaimType="inputClaim" />
@@ -457,6 +456,7 @@
           <InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
         </InputParameters>
       </ClaimsTransformation>
+
     </ClaimsTransformations>
 
     <ClientDefinitions>
@@ -546,205 +546,11 @@
   </BuildingBlocks>
 
   <!--
-        A list of all the claim providers that can be used in the technical policies. If a claims provider is not listed 
+        A list of all the claim providers that can be used in the technical policies. If a claims provider is not listed
         in this section, then it cannot be used in a technical policy.
     -->
+
   <ClaimsProviders>
-
-    <ClaimsProvider>
-      <!-- The following Domain element allows this profile to be used if the request comes with domain_hint 
-           query string parameter, e.g. domain_hint=facebook.com  -->
-      <Domain>facebook.com</Domain>
-      <DisplayName>Facebook</DisplayName>
-      <TechnicalProfiles>
-        <!-- This is the base technical profile defining the Url and protocol related to facebook OAUTH2 -->
-        <TechnicalProfile Id="Facebook-OAUTH-Base">
-          <!-- The text in the following DisplayName element is shown to the user on the claims provider 
-               selection screen. -->
-          <DisplayName>Facebook</DisplayName>
-          <Protocol Name="OAuth2" />
-          <Metadata>
-            <Item Key="ProviderName">facebook</Item>
-            <Item Key="authorization_endpoint">https://www.facebook.com/dialog/oauth</Item>
-            <Item Key="AccessTokenEndpoint">https://graph.facebook.com/oauth/access_token</Item>
-            <Item Key="HttpBinding">GET</Item>
-            <Item Key="UsePolicyInRedirectUri">0</Item>
-
-            <!-- The Facebook required HTTP GET method, but the access token response is in JSON format from 3/27/2017 -->
-            <Item Key="AccessTokenResponseFormat">json</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_FacebookSecret" />
-          </CryptographicKeys>
-          <InputClaims />
-          <OutputClaims />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-        </TechnicalProfile>
-        
-        <!-- This is the technical profile used to sign up or sign in using facebook account -->
-        <TechnicalProfile Id="Facebook-OAUTH">
-          <DisplayName>Facebook</DisplayName>
-          <InputClaims />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="id" />
-            <OutputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="first_name" />
-            <OutputClaim ClaimTypeReferenceId="surname" PartnerClaimType="last_name" />
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="email" />
-            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
-            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromUserIdentity" />
-            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
-          </OutputClaimsTransformations>
-          <IncludeTechnicalProfile ReferenceId="Facebook-OAUTH-Base" />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-
-        <!-- This is the technical profile used to link with facebook account -->
-        <TechnicalProfile Id="Facebook-OAUTH-Link">
-          <DisplayName>Link Facebook</DisplayName>
-          <Metadata>
-            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
-            <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
-          </Metadata>
-          <InputClaims />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="id" />
-            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
-            <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
-          </OutputClaimsTransformations>
-          <IncludeTechnicalProfile ReferenceId="Facebook-OAUTH-Base" />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-          <!-- The button will show up only when facebook.com is missing in issuers claim -->
-          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
-        </TechnicalProfile>
-
-        <!-- This is the technical profile used to Unlink a facebook account -->
-        <TechnicalProfile Id="Facebook-OAUTH-Unlink">
-          <DisplayName>Unlink Facebook</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.ClaimsTransformationProtocolProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
-            <Item Key="ClaimValueOnWhichToEnable">facebook.com</Item>
-          </Metadata>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerToUnlink" DefaultValue="facebook.com" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="RemoveUserIdentityFromCollectionByIssuer" />
-          </OutputClaimsTransformations>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-          <!-- The button will show up only when facebook.com is present in issuers claim -->
-          <EnabledForUserJourneys>OnItemExistenceInStringCollectionClaim</EnabledForUserJourneys>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
-    <ClaimsProvider>
-      <DisplayName>PalmID SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="PalmID-OIDC-Base">
-          <DisplayName>PalmID SignIn</DisplayName>
-          <Protocol Name="OpenIdConnect" />
-          <Metadata>
-            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
-            <Item Key="UserMessageIfInvalidPassword">Your password is incorrect</Item>
-            <Item Key="UserMessageIfOldPasswordUsed">Looks like you used an old password</Item>
-
-            <Item Key="ProviderName">https://auth.redrockbiometrics.com/</Item>
-			<Item Key="METADATA">https://auth.redrockbiometrics.com/agent/.well-known/openid-configuration</Item>
-            <Item Key="response_types">code</Item>
-            <Item Key="response_mode">query</Item>
-            <Item Key="scope">openid</Item>
-
-            <!-- Policy Engine Clients -->
-            <Item Key="UsePolicyInRedirectUri">false</Item>
-            <Item Key="HttpBinding">POST</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="client_secret" StorageReferenceId="B2C_1A_PalmIDSecret" />
-          </CryptographicKeys>
-          <InputClaims>
-          </InputClaims>
-          <OutputClaims>
-          </OutputClaims>
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-
-        <TechnicalProfile Id="PalmID-OIDC">
-          <DisplayName>PalmID SignIn</DisplayName>
-          <InputClaims>
-            <!-- <InputClaim ClaimTypeReferenceId="signInName" PartnerClaimType="username" Required="true" /> -->
-            <!-- <InputClaim ClaimTypeReferenceId="password" Required="true" /> -->
-            <!-- <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="password" /> -->
-            <!-- <InputClaim ClaimTypeReferenceId="scope" DefaultValue="openid" /> -->
-            <!-- <InputClaim ClaimTypeReferenceId="nca" PartnerClaimType="nca" DefaultValue="1" /> -->
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub"/>
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
-            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
-            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromUserIdentity" />
-            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
-          </OutputClaimsTransformations>
-          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
-        </TechnicalProfile>
-
-        <!-- This is the technical profile used to link with facebook account -->
-        <TechnicalProfile Id="PalmID-OIDC-Link">
-          <DisplayName>Link PalmID</DisplayName>
-          <Metadata>
-            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
-            <Item Key="ClaimValueOnWhichToEnable">auth.redrockbiometrics.com</Item>
-          </Metadata>
-          <InputClaims />
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
-            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <OutputClaimsTransformations>
-            <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
-            <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
-          </OutputClaimsTransformations>
-          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-          <!-- The button will show up only when facebook.com is missing in issuers claim -->
-          <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys>
-        </TechnicalProfile>
-
-        <TechnicalProfile Id="PalmID-OIDC-Approve">
-          <DisplayName>Link PalmID Approve</DisplayName>
-          <Metadata>
-            <Item Key="ClaimTypeOnWhichToEnable">issuers</Item>
-            <Item Key="ClaimValueOnWhichToEnable">auth.redrockbiometrics.com</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="login_hint" DefaultValue="somevalue" AlwaysUseDefaultValue="true" />
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
-          </OutputClaims>
-          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
-          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
-
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
       <TechnicalProfiles>
@@ -831,6 +637,7 @@
             <PersistedClaim ClaimTypeReferenceId="otherMails" />
             <PersistedClaim ClaimTypeReferenceId="givenName" />
             <PersistedClaim ClaimTypeReferenceId="surname" />
+            <PersistedClaim ClaimTypeReferenceId="extension_palmIdUserId" />
           </PersistedClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
@@ -857,6 +664,7 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
             <PersistedClaim ClaimTypeReferenceId="userIdentities" />
+            <PersistedClaim ClaimTypeReferenceId="extension_palmIdUserId" />
           </PersistedClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
@@ -934,6 +742,35 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
 
+        <TechnicalProfile Id="AAD-UserReadUsingIdTokenObjectId">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="idTokenObjectId" PartnerClaimType="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="userIdentities" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="localAccountAuthentication" />
+
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="accountEnabled" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="AssertAccountEnabledIsTrue" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+
         <TechnicalProfile Id="AAD-UserReadUsingEmailAddress">
           <Metadata>
             <Item Key="api-version">1.6</Item>
@@ -983,6 +820,7 @@
             <OutputClaim ClaimTypeReferenceId="otherMails" />
             <OutputClaim ClaimTypeReferenceId="givenName" />
             <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" />
           </OutputClaims>
           <OutputClaimsTransformations>
             <OutputClaimsTransformation ReferenceId="ExtractIssuers" />
@@ -1057,7 +895,7 @@
             <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
           </CryptographicKeys>
           <InputClaims>
-            <!-- These claims ensure that any values retrieved in the previous steps (e.g. from an external IDP) are prefilled. 
+            <!-- These claims ensure that any values retrieved in the previous steps (e.g. from an external IDP) are prefilled.
                  Note that some of these claims may not have any value, for example, if the external IDP did not provide any of
                  these values, or if the claim did not appear in the OutputClaims section of the IDP.
                  In addition, if a claim is not in the InputClaims section, but it is in the OutputClaims section, then its
@@ -1068,14 +906,14 @@
           </InputClaims>
           <OutputClaims>
             <!-- These claims are not shown to the user because their value is obtained through the "ValidationTechnicalProfiles"
-                 referenced below, or a default value is assigned to the claim. A claim is only shown to the user to provide a 
+                 referenced below, or a default value is assigned to the claim. A claim is only shown to the user to provide a
                  value if its value cannot be obtained through any other means. -->
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <OutputClaim ClaimTypeReferenceId="newUser" />
             <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
 
-            <!-- Optional claims. These claims are collected from the user and can be modified. If a claim is to be persisted in the directory after having been 
-                 collected from the user, it needs to be added as a PersistedClaim in the ValidationTechnicalProfile referenced below, i.e. 
+            <!-- Optional claims. These claims are collected from the user and can be modified. If a claim is to be persisted in the directory after having been
+                 collected from the user, it needs to be added as a PersistedClaim in the ValidationTechnicalProfile referenced below, i.e.
                  in AAD-UserWriteUsingAlternativeSecurityId. -->
             <OutputClaim ClaimTypeReferenceId="displayName" />
             <OutputClaim ClaimTypeReferenceId="givenName" />
@@ -1188,7 +1026,7 @@
           </CryptographicKeys>
           <InputClaims>
             <InputClaim ClaimTypeReferenceId="objectId" />
-  
+
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
@@ -1198,7 +1036,7 @@
             <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
-        
+
         <TechnicalProfile Id="AAD-UserWritePasswordUsingObjectId">
           <Metadata>
             <Item Key="Operation">Write</Item>
@@ -1211,7 +1049,7 @@
           <PersistedClaims>
             <PersistedClaim ClaimTypeReferenceId="objectId" />
             <PersistedClaim ClaimTypeReferenceId="newPassword" PartnerClaimType="password"/>
-  
+
           </PersistedClaims>
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
@@ -1297,452 +1135,6 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-    <!-- <ClaimsProvider> -->
-    <!--   <DisplayName>Approval Token Issuer</DisplayName> -->
-    <!--   <TechnicalProfiles> -->
-    <!--     <TechnicalProfile Id="JwtIssuerApproval"> -->
-    <!--       <DisplayName>JWT Issuer Approval</DisplayName> -->
-    <!--       <Protocol Name="None" /> -->
-    <!--       <OutputTokenFormat>JWT</OutputTokenFormat> -->
-    <!--       <Metadata> -->
-    <!--         <Item Key="client_id">{service:te}</Item> -->
-    <!--         <Item Key="issuer_refresh_token_user_identity_claim_type">objectId</Item> -->
-    <!--         <Item Key="SendTokenResponseBodyWithJsonNumbers">true</Item> -->
-    <!--       </Metadata> -->
-    <!--       <CryptographicKeys> -->
-    <!--         <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" /> -->
-    <!--         <Key Id="issuer_refresh_token_key" StorageReferenceId="B2C_1A_TokenEncryptionKeyContainer" /> -->
-    <!--       </CryptographicKeys> -->
-    <!--       <InputClaims> -->
-    <!--       </InputClaims> -->
-    <!--       <OutputClaims> -->
-    <!--       </OutputClaims> -->
-    <!--     </TechnicalProfile> -->
-    <!--   </TechnicalProfiles> -->
-    <!-- </ClaimsProvider> -->
-
-    <!--Sample: This technical profile specifies how B2C should validate your token, and what claims you want B2C to extract from the token. 
-      The METADATA value in the TechnicalProfile meta-data is required. 
-      The “IdTokenAudience” and “issuer” arguments are optional (see later section)-->
-    <ClaimsProvider>
-      <DisplayName>ID Token Hint ClaimsProvider</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="IdTokenHint_ExtractClaims">
-          <DisplayName>ID Token Hint TechnicalProfile</DisplayName>
-          <Protocol Name="None" />
-          <Metadata>
-            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin/v2.0/.well-known/openid-configuration</Item>
-
-            <!-- <Item Key="IdTokenAudience">your_optional_audience_override</Item> -->
-            <!-- <Item Key="issuer">your_optional_token_issuer_override</Item> -->
-          </Metadata>
-          <OutputClaims>
-            <!-- <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" /> -->
-            <OutputClaim ClaimTypeReferenceId="objectId" DefaultValue="a22a19b3-7b2c-47c3-9e86-2f1ffbfb7e72" />
-          </OutputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
   </ClaimsProviders>
 
-  <UserJourneys>
-    <UserJourney Id="SignUpOrSignIn">
-      <OrchestrationSteps>
-
-        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
-          <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="PalmIDExchange" />
-            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
-          </ClaimsProviderSelections>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- Check if the user has selected to sign in using one of the social providers -->
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-              <Value>objectId</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PalmIDExchange" TechnicalProfileReferenceId="PalmID-OIDC" />
-            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- For social IDP authentication, attempt to find the user account in the directory. -->
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>localAccountAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentity-NoError" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- Show self-asserted page only if the directory does not have the user account already (i.e. we do not have an objectId). 
-          This can only happen when authentication happened using a social IDP. If local account was created or authentication done
-          using ESTS in step 2, then an user account must exist in the directory by this time. -->
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-              <Value>objectId</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="SelfAsserted-Social" TechnicalProfileReferenceId="SelfAsserted-Social" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- This step reads any user attributes that we may not have received when authenticating using ESTS so they can be sent 
-          in the token. -->
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="6" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="false">
-              <Value>newUser</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsProviderSelections DisplayOption="ShowSingleProvider">
-            <ClaimsProviderSelection TargetClaimsExchangeId="LinkPalmIDExchange" />
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="LinkPalmIDExchange" TechnicalProfileReferenceId="PalmID-OIDC-Link" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="8" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect 
-             from the user. So, in that case, create the user in the directory if one does not already exist 
-             (verified using objectId which would be set from the last step if account was created in the directory. -->
-        <OrchestrationStep Order="9" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
-              <Value>objectId</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserWrite" TechnicalProfileReferenceId="AAD-UserWriteUsingUserIdentity" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="10" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <UserJourney Id="SignInWithIdTokenAndApproveWithPalm">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="GetClaims" CpimIssuerTechnicalProfileReferenceId="IdTokenHint_ExtractClaims" />
-
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId"/>
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PalmIDApproveExchange" TechnicalProfileReferenceId="PalmID-OIDC-Approve" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
-        <!-- <!&#45;&#45; <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections"> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   <ClaimsProviderSelections> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" /> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <ClaimsProviderSelection TargetClaimsExchangeId="PalmIDExchange" /> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   </ClaimsProviderSelections> &#45;&#45;> -->
-        <!-- <!&#45;&#45; </OrchestrationStep> &#45;&#45;> -->
-        <!-- <!&#45;&#45;  &#45;&#45;> -->
-        <!-- <!&#45;&#45; <OrchestrationStep Order="2" Type="ClaimsExchange"> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   <ClaimsExchanges> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <ClaimsExchange Id="PalmIDExchange" TechnicalProfileReferenceId="PalmID&#38;#45;OIDC" /> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted&#38;#45;LocalAccountSignin&#38;#45;Email" /> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   </ClaimsExchanges> &#45;&#45;> -->
-        <!-- <!&#45;&#45; </OrchestrationStep> &#45;&#45;> -->
-        <!-- <!&#45;&#45;  &#45;&#45;> -->
-        <!-- <!&#45;&#45; <OrchestrationStep Order="3" Type="ClaimsExchange"> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   <Preconditions> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <Precondition Type="ClaimEquals" ExecuteActionsIf="true"> &#45;&#45;> -->
-        <!-- <!&#45;&#45;       <Value>issuer</Value> &#45;&#45;> -->
-        <!-- <!&#45;&#45;       <Value>auth.redrockbiometrics.com</Value> &#45;&#45;> -->
-        <!-- <!&#45;&#45;       <Action>SkipThisOrchestrationStep</Action> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     </Precondition> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   </Preconditions> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   <ClaimsExchanges> &#45;&#45;> -->
-        <!-- <!&#45;&#45;     <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD&#38;#45;UserReadUsingObjectId" /> &#45;&#45;> -->
-        <!-- <!&#45;&#45;   </ClaimsExchanges> &#45;&#45;> -->
-        <!-- <!&#45;&#45; </OrchestrationStep> &#45;&#45;> -->
-        <!--  -->
-        <!-- <OrchestrationStep Order="1" Type="ClaimsExchange"> -->
-        <!--   <!&#45;&#45; <Preconditions> &#45;&#45;> -->
-        <!--   <!&#45;&#45;   <Precondition Type="ClaimEquals" ExecuteActionsIf="true"> &#45;&#45;> -->
-        <!--   <!&#45;&#45;     <Value>issuer</Value> &#45;&#45;> -->
-        <!--   <!&#45;&#45;     <Value>auth.redrockbiometrics.com</Value> &#45;&#45;> -->
-        <!--   <!&#45;&#45;     <Action>SkipThisOrchestrationStep</Action> &#45;&#45;> -->
-        <!--   <!&#45;&#45;   </Precondition> &#45;&#45;> -->
-        <!--   <!&#45;&#45; </Preconditions> &#45;&#45;> -->
-        <!--   <ClaimsExchanges> -->
-        <!--     <ClaimsExchange Id="PalmIDApproveExchange" TechnicalProfileReferenceId="PalmID&#45;OIDC&#45;Approve" /> -->
-        <!--   </ClaimsExchanges> -->
-        <!-- </OrchestrationStep> -->
-        <!--  -->
-        <!-- <OrchestrationStep Order="2" Type="ClaimsExchange"> -->
-        <!--   <ClaimsExchanges> -->
-        <!--     <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD&#45;UserReadUsingUserIdentity" /> -->
-        <!--   </ClaimsExchanges> -->
-        <!-- </OrchestrationStep> -->
-        <!--  -->
-        <!-- <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" /> -->
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <UserJourney Id="SignInAndApproveWithPalm">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <ClaimsProviderSelections>
-            <!-- <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" /> -->
-            <ClaimsProviderSelection TargetClaimsExchangeId="PalmIDExchange" />
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PalmIDExchange" TechnicalProfileReferenceId="PalmID-OIDC" />
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>issuer</Value>
-              <Value>auth.redrockbiometrics.com</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>issuer</Value>
-              <Value>auth.redrockbiometrics.com</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PalmIDApproveExchange" TechnicalProfileReferenceId="PalmID-OIDC-Approve" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentity" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <UserJourney Id="SignInAndLinkAccount">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>localAccountAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentity" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <!-- Select a social idp for account linking and Unlinking. It will only shows the IDPs which has not been linked 
-        with and IDPs that can be Unlinked. You can choose to only show accounts to link by removing claims exchange used to Unlink -->
-        <OrchestrationStep Order="5" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <!-- The page will show even if there's only one selection. Otherwise, the only option will be chosen automatically -->
-          <ClaimsProviderSelections DisplayOption="ShowSingleProvider">
-            <!-- The button to link Facebook account if not linked already -->
-            <ClaimsProviderSelection TargetClaimsExchangeId="LinkFacebookExchange" />
-            <!-- The button to unlink Facebook account if already linked -->
-            <ClaimsProviderSelection TargetClaimsExchangeId="UnlinkFacebookExchange" />
-            <!-- The button to link Microsoft account if not linked already -->
-            <!-- The button to unlink Microsoft account if already linked -->
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="6" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="LinkFacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH-Link" />
-            <ClaimsExchange Id="UnlinkFacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH-Unlink" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="7" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="UpdateUserIdentities" TechnicalProfileReferenceId="AAD-UserUpdateWithUserIdentities" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="8" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <UserJourney Id="ProfileEdit">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
-            <ClaimsProviderSelection TargetClaimsExchangeId="FacebookExchange" />
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="FacebookExchange" TechnicalProfileReferenceId="Facebook-OAUTH" />
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>localAccountAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadUsingUserIdentity" TechnicalProfileReferenceId="AAD-UserReadUsingUserIdentity" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <Preconditions>
-            <Precondition Type="ClaimEquals" ExecuteActionsIf="true">
-              <Value>authenticationSource</Value>
-              <Value>socialIdpAuthentication</Value>
-              <Action>SkipThisOrchestrationStep</Action>
-            </Precondition>
-          </Preconditions>
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="5" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <UserJourney Id="PasswordReset">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-  </UserJourneys>
 </TrustFrameworkPolicy>

@@ -5,28 +5,18 @@
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
   TenantId="redrockbiometricsdemo.onmicrosoft.com"
-  PolicyId="B2C_1A_signin_and_approvewithpalm"
+  PolicyId="B2C_1A_signinwithidtoken_and_approvewithpalm"
   DeploymentMode="Development"
   UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
-  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signin_and_approvewithpalm">
+  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signinwithidtoken_and_approvewithpalm">
 
   <BasePolicy>
     <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
-  <BuildingBlocks>
-    <ClaimsSchema>
-      <ClaimType Id="trx_id">
-        <DisplayName>Transaction ID</DisplayName>
-        <DataType>string</DataType>
-        <AdminHelpText>Specifies transaction ID for PalmID Approval.</AdminHelpText>
-        <UserHelpText>Specifies transaction ID for PalmID Approval.</UserHelpText>
-      </ClaimType>
-    </ClaimsSchema>
-  </BuildingBlocks>
   <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignInAndApproveWithPalmToken" />
+    <DefaultUserJourney ReferenceId="SignInWithIdTokenAndApproveWithPalm" />
     <UserJourneyBehaviors>
       <JourneyInsights TelemetryEngine="ApplicationInsights" InstrumentationKey="f46a9c7c-a490-4de5-a187-7972e83987a5" DeveloperMode="true" ClientEnabled="false" ServerEnabled="true" TelemetryVersion="1.0.0" />
     </UserJourneyBehaviors>

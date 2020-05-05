@@ -20,12 +20,12 @@ const loginOidc = createOidcAuth(
   SignInType.Window,
   appUrl,
   {
-    authority: 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin/v2.0/',
+    authority: 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin_palmid/v2.0/',
     metadata: {
-      'authorization_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin/oauth2/v2.0/authorize',
-      'token_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin/oauth2/v2.0/token',
-      'end_session_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin/oauth2/v2.0/logout',
-      'jwks_uri': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin/discovery/v2.0/keys',
+      'authorization_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin_palmid/oauth2/v2.0/authorize',
+      'token_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin_palmid/oauth2/v2.0/token',
+      'end_session_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin_palmid/oauth2/v2.0/logout',
+      'jwks_uri': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signup_signin_palmid/discovery/v2.0/keys',
       'issuer': 'https://redrockbiometricsdemo.b2clogin.com/9e0c300f-8b0a-49bb-908c-e837280665f4/v2.0/',
     },
     signingKeys: [
@@ -38,7 +38,6 @@ const loginOidc = createOidcAuth(
     redirect_uri: `${appUrl}signin-oidc`,
   },
   console,
-  LogLevel.Debug,
 );
 
 const approveOidc = createOidcAuth(
@@ -46,12 +45,12 @@ const approveOidc = createOidcAuth(
   SignInType.Window,
   appUrl,
   {
-    authority: 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signin_and_approvewithpalm/v2.0/',
+    authority: 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signinwithidtoken_and_palmidverify/v2.0/',
     metadata: {
-      'authorization_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signin_and_approvewithpalm/oauth2/v2.0/authorize',
-      'token_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signin_and_approvewithpalm/oauth2/v2.0/token',
-      'end_session_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signin_and_approvewithpalm/oauth2/v2.0/logout',
-      'jwks_uri': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signin_and_approvewithpalm/discovery/v2.0/keys',
+      'authorization_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signinwithidtoken_and_palmidverify/oauth2/v2.0/authorize',
+      'token_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signinwithidtoken_and_palmidverify/oauth2/v2.0/token',
+      'end_session_endpoint': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signinwithidtoken_and_palmidverify/oauth2/v2.0/logout',
+      'jwks_uri': 'https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/b2c_1a_signinwithidtoken_and_palmidverify/discovery/v2.0/keys',
       'issuer': 'https://redrockbiometricsdemo.b2clogin.com/9e0c300f-8b0a-49bb-908c-e837280665f4/v2.0/',
     },
     signingKeys: [
@@ -64,7 +63,6 @@ const approveOidc = createOidcAuth(
     redirect_uri: `${appUrl}approve-oidc`,
   },
   console,
-  LogLevel.Debug,
 );
 
 const routes = [
@@ -82,6 +80,8 @@ const routes = [
     },
 
     beforeEnter: (to, from, next) => {
+      console.log(approveOidc && approveOidc.userProfile);
+      console.log(loginOidc && loginOidc.userProfile);
       if (
         approveOidc.isAuthenticated
         && to.params.id === approveOidc.userProfile.trx_id
@@ -95,6 +95,7 @@ const routes = [
         state: {to},
         extraQueryParams: {
           trx_id: to.params.id,
+          id_token_hint: loginOidc.user.id_token,
         },
       });
 
