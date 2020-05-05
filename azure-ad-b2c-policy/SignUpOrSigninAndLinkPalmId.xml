@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TrustFrameworkPolicy
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="redrockbiometricsdemo.onmicrosoft.com" PolicyId="B2C_1A_signup_signin_palmid" PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid" TenantObjectId="9e0c300f-8b0a-49bb-908c-e837280665f4">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
+  PolicySchemaVersion="0.3.0.0"
+  TenantId="redrockbiometricsdemo.onmicrosoft.com"
+  PolicyId="B2C_1A_signup_signin_palmid"
+  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid"
+  DeploymentMode="Development"
+  UserJourneyRecorderEndpoint="urn:journeyrecorder:applicationinsights"
+  TenantObjectId="9e0c300f-8b0a-49bb-908c-e837280665f4"
+>
 
   <BasePolicy>
     <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
@@ -114,9 +122,6 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <!-- The previous step (SelfAsserted-Social) could have been skipped if there were no attributes to collect
-             from the user. So, in that case, create the user in the directory if one does not already exist
-             (verified using objectId which would be set from the last step if account was created in the directory. -->
         <OrchestrationStep Order="9" Type="ClaimsExchange">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
@@ -129,7 +134,14 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="10" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <!-- Save extension_palmIdUserId claim for user -->
+        <OrchestrationStep Order="10" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserUpdateExtensionPalmIdUserId" TechnicalProfileReferenceId="AAD-UserUpdateWithExtensionPalmIdUserId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+
+        <OrchestrationStep Order="11" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
@@ -139,9 +151,14 @@
   <RelyingParty>
       <DefaultUserJourney ReferenceId="SignUpOrSignInAndLinkPalmId" />
       <UserJourneyBehaviors>
-          <SingleSignOn Scope="Tenant" KeepAliveInDays="30" />
-          <SessionExpiryType>Absolute</SessionExpiryType>
-          <SessionExpiryInSeconds>1200</SessionExpiryInSeconds>
+        <SingleSignOn Scope="Tenant" KeepAliveInDays="30" />
+        <SessionExpiryType>Absolute</SessionExpiryType>
+        <SessionExpiryInSeconds>1200</SessionExpiryInSeconds>
+        <JourneyInsights TelemetryEngine="ApplicationInsights"
+          InstrumentationKey="f46a9c7c-a490-4de5-a187-7972e83987a5"
+          DeveloperMode="true" ClientEnabled="false"
+          ServerEnabled="true" TelemetryVersion="1.0.0"
+        />
       </UserJourneyBehaviors>
       <TechnicalProfile Id="PolicyProfile">
           <DisplayName>PolicyProfile</DisplayName>

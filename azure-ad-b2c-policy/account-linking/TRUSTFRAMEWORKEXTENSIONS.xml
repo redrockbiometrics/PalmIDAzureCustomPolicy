@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<TrustFrameworkPolicy
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
-  PolicySchemaVersion="0.3.0.0"
-  TenantId="redrockbiometricsdemo.onmicrosoft.com"
-  PolicyId="B2C_1A_TrustFrameworkExtensions"
+<TrustFrameworkPolicy 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" 
+  PolicySchemaVersion="0.3.0.0" 
+  TenantId="redrockbiometricsdemo.onmicrosoft.com" 
+  PolicyId="B2C_1A_TrustFrameworkExtensions" 
   PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions">
-
+  
   <BasePolicy>
     <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkPalmID</PolicyId>
@@ -17,6 +17,33 @@
   </BuildingBlocks>
 
   <ClaimsProviders>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH-Base">
+          <Metadata>
+            <Item Key="client_id">facebook_clientid</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Microsoft Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="MSA-OIDC-Base">
+          <Metadata>
+            <Item Key="client_id">msa_clientid</Item>
+            <Item Key="IdTokenAudience">msa_clientid</Item>
+            <Item Key="scope">openid profile email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
     <ClaimsProvider>
       <DisplayName>Azure Active Directory</DisplayName>
       <TechnicalProfiles>
@@ -36,6 +63,18 @@
           <Metadata>
             <Item Key="client_id">azureidp</Item>
           </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>ID Token Hint ClaimsProvider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="IdTokenHint_ExtractClaims">
+          <Metadata>
+            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration</Item>
+          </Metadata>
+          <OutputClaims></OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
