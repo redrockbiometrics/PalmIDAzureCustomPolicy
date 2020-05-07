@@ -1,0 +1,265 @@
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="redrockbiometricsdemo.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkPalmID" PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_TrustFrameworkPalmID" TenantObjectId="9e0c300f-8b0a-49bb-908c-e837280665f4">
+  <BasePolicy>
+    <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
+    <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
+  </BasePolicy>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="palmIdUserIdVerifiedBy">
+        <DisplayName>palmIdUserIdVerifiedBy</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>palmIdUserIdVerifiedBy</AdminHelpText>
+        <UserHelpText>palmIdUserIdVerifiedBy</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="extension_palmIdUserId">
+        <DisplayName>extension_palmIdUserId</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>extension_palmIdUserId</AdminHelpText>
+        <UserHelpText>extension_palmIdUserId</UserHelpText>
+      </ClaimType>
+      <ClaimType Id="trx_id">
+        <DisplayName>Transaction ID</DisplayName>
+        <DataType>string</DataType>
+        <AdminHelpText>Specifies transaction ID for PalmID Approval.</AdminHelpText>
+        <UserHelpText>Specifies transaction ID for PalmID Approval.</UserHelpText>
+      </ClaimType>
+      <!-- Stores the error message for unsolicited request (a request without id_token_hint) and user not found -->
+      <ClaimType Id="errorMessage">
+        <DisplayName>Error</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>Add help text here</UserHelpText>
+        <UserInputType>Paragraph</UserInputType>
+      </ClaimType>
+      <ClaimType Id="idTokenHintObjectId">
+        <DisplayName>idTokenHintObjectId</DisplayName>
+        <DataType>string</DataType>
+        <UserHelpText>idTokenHintObjectId</UserHelpText>
+      </ClaimType>
+    </ClaimsSchema>
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="CreateUnsolicitedErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You cannot sign-in without invitation. Please click the link in the email" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CreateUserNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You aren't registered in the system! Please contact the Help Desk on 0800 xxx yyy and ask to be added to the system" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CreateUserPalmIdNotFoundErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="You aren't linked with PalmID! Please contact the Help Desk on 0800 xxx yyy and ask to be added to the system" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="CreateUserPalmIdNotErrorMessage" TransformationMethod="CreateStringClaim">
+        <InputParameters>
+          <InputParameter Id="value" DataType="string" Value="Your action has not been approved by PalmID" />
+        </InputParameters>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="errorMessage" TransformationClaimType="createdClaim" />
+        </OutputClaims>
+      </ClaimsTransformation>
+      <ClaimsTransformation Id="AssertExtensionPalmIdUserIdAndPalmIdUserIdVerifiedByAreEqual" TransformationMethod="AssertStringClaimsAreEqual">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="extension_palmIdUserId" TransformationClaimType="inputClaim1" />
+          <InputClaim ClaimTypeReferenceId="palmIdUserIdVerifiedBy" TransformationClaimType="inputClaim2" />
+        </InputClaims>
+        <InputParameters>
+          <InputParameter Id="stringComparison" DataType="string" Value="ordinalIgnoreCase" />
+        </InputParameters>
+      </ClaimsTransformation>
+    </ClaimsTransformations>
+  </BuildingBlocks>
+  <ClaimsProviders>
+    <ClaimsProvider>
+      <DisplayName>ID Token Hint ClaimsProvider</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="IdTokenHint_ExtractClaims">
+          <DisplayName>ID Token Hint TechnicalProfile</DisplayName>
+          <Protocol Name="None" />
+          <Metadata>
+            <!-- In example we use id_token from B2C_1A_signup_signin as id_token_hint -->
+            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration</Item>
+          </Metadata>
+          <OutputClaims></OutputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Self Asserted</DisplayName>
+      <TechnicalProfiles>
+        <!-- Demo: Show error message-->
+        <TechnicalProfile Id="SelfAsserted-Error">
+          <DisplayName>Unsolicited error message</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ContentDefinitionReferenceId">api.selfasserted</Item>
+            <!-- Sample: Remove the continue button-->
+            <Item Key="setting.showContinueButton">false</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="errorMessage" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="errorMessage" />
+          </OutputClaims>
+        </TechnicalProfile>
+        <!-- Show unsolicited error message-->
+        <TechnicalProfile Id="SelfAsserted-Unsolicited">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUnsolicitedErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+        <!-- Show user not found error message-->
+        <TechnicalProfile Id="SelfAsserted-UserNotFound">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserNotFoundErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+        <!-- Show user palmId not found error message-->
+        <TechnicalProfile Id="SelfAsserted-UserPalmIdNotFound">
+          <InputClaimsTransformations>
+            <InputClaimsTransformation ReferenceId="CreateUserPalmIdNotFoundErrorMessage" />
+          </InputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="SelfAsserted-Error" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserReadExtensionPalmIdUserIdUsingIdHintObjectId">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">false</Item>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">An account could not be found for the provided user ID.</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="idTokenHintObjectId" PartnerClaimType="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserUpdateWithExtensionPalmIdUserId">
+          <Metadata>
+            <Item Key="api-version">1.6</Item>
+            <Item Key="Operation">Write</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <PersistedClaims>
+            <PersistedClaim ClaimTypeReferenceId="objectId" />
+          </PersistedClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+    <ClaimsProvider>
+      <DisplayName>Sign in with PalmID</DisplayName>
+      <TechnicalProfiles>
+        <!-- Write extension_palmIdUserId into user claims -->
+        <TechnicalProfile Id="PalmID-OIDC-Base">
+          <DisplayName>Sign in with PalmID</DisplayName>
+          <Protocol Name="OpenIdConnect" />
+          <Metadata>
+            <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
+            <Item Key="UserMessageIfInvalidPassword">Your password is incorrect</Item>
+            <Item Key="UserMessageIfOldPasswordUsed">Looks like you used an old password</Item>
+            <Item Key="ProviderName">https://auth.redrockbiometrics.com/</Item>
+            <Item Key="METADATA">https://auth.redrockbiometrics.com/agent/.well-known/openid-configuration</Item>
+            <Item Key="response_types">code</Item>
+            <Item Key="response_mode">query</Item>
+            <Item Key="scope">openid</Item>
+            <!-- Policy Engine Clients -->
+            <Item Key="UsePolicyInRedirectUri">false</Item>
+            <Item Key="HttpBinding">POST</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="client_secret" StorageReferenceId="B2C_1A_PalmIDSecret" />
+          </CryptographicKeys>
+          <InputClaims></InputClaims>
+          <OutputClaims></OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+        <TechnicalProfile Id="PalmID-OIDC">
+          <DisplayName>Sign in with PalmID</DisplayName>
+          <InputClaims></InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" PartnerClaimType="sub" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateRandomUPNUserName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserPrincipalName" />
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="CreateSubjectClaimFromUserIdentity" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentity" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
+        </TechnicalProfile>
+        <!-- This is the technical profile used to link with PalmID account -->
+        <TechnicalProfile Id="PalmID-OIDC-Link">
+          <DisplayName>Link PalmID</DisplayName>
+          <!-- <Metadata> -->
+          <!--   <Item Key="ClaimTypeOnWhichToEnable">issuers</Item> -->
+          <!--   <Item Key="ClaimValueOnWhichToEnable">auth.redrockbiometrics.com</Item> -->
+          <!-- </Metadata> -->
+          <InputClaims />
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" PartnerClaimType="sub" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <OutputClaimsTransformation ReferenceId="CreateUserIdentityToLink" />
+            <OutputClaimsTransformation ReferenceId="AppendUserIdentityToLink" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+          <!-- The button will show up only when auth.redrockbiometrics.com is missing in issuers claim -->
+          <!-- <EnabledForUserJourneys>OnItemAbsenceInStringCollectionClaim</EnabledForUserJourneys> -->
+        </TechnicalProfile>
+        <TechnicalProfile Id="PalmID-OIDC-Verify">
+          <DisplayName>Link PalmID Verification</DisplayName>
+          <InputClaims>
+            <!-- login_hint forces to authenticate only user with userId passed in login_hint -->
+            <InputClaim ClaimTypeReferenceId="extension_palmIdUserId" PartnerClaimType="login_hint" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="palmIdUserIdVerifiedBy" PartnerClaimType="sub" />
+          </OutputClaims>
+          <OutputClaimsTransformations>
+            <!-- Assert that sub from OpenID is the same as extension_palmIdUserId -->
+            <OutputClaimsTransformation ReferenceId="AssertExtensionPalmIdUserIdAndPalmIdUserIdVerifiedByAreEqual" />
+          </OutputClaimsTransformations>
+          <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+  </ClaimsProviders>
+</TrustFrameworkPolicy>
+
