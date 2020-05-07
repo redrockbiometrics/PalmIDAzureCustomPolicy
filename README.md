@@ -1,10 +1,6 @@
-# Azure custom policy
-Based on https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking
-
-
 # Tutorial for configuring PalmID OIDC with Azure Active Directory B2C
 
-In this tutorial, you will learn how to integrate Azure AD B2C authentication with PalmID. With PalmID your users can Sign In with their palm and use their palm as part of multi-factor authentication. 
+In this tutorial, you will learn how to integrate Azure AD B2C authentication with PalmID. With PalmID your users can Sign In with their palm and use their palm as part of multi-factor authentication.
 
 ## Onboarding with PalmID
 
@@ -24,14 +20,7 @@ and follow https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-po
 ### 2. Configuring custom attributes storage
 https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom-attributes
 
-### 3. Change base policy in TrustFrameworkExtension to TrustFrameworkPalmId
-```
-  <BasePolicy>
-    <TenantId>YOURTENANT.onmicrosoft.com</TenantId>
-    <PolicyId>B2C_1A_TrustFrameworkPalmID</PolicyId>
-  </BasePolicy>
-```
-### 4. Add PalmID client_id configuration to TrustFrameworkExtension:
+### 3. Set PalmID client_id in TrustFrameworkPalmIDExtension:
 ```
     <ClaimsProvider>
       <DisplayName>PalmID</DisplayName>
@@ -45,7 +34,7 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom
     </ClaimsProvider>
 ```
 
-### 5. Add IdTokenHint configuration to TrustFrameworkExtension:
+### 4. Set IdTokenHint configuration in TrustFrameworkPalmIDExtension:
 ```
     <ClaimsProvider>
       <DisplayName>ID Token Hint ClaimsProvider</DisplayName>
@@ -66,7 +55,7 @@ https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom
     </ClaimsProvider>
 ```
 
-### 6. Create the PalmID key
+### 5. Create the PalmID key
 
 Add your PalmID application's App Secret as a policy key. You can use the App Secret of the application you created as part of this article's prerequisites.
 
@@ -78,10 +67,10 @@ Add your PalmID application's App Secret as a policy key. You can use the App Se
 6. Select Create.
 
 
-### 7. Upload files
-Upload files 
+### 6. Upload files
+Upload files
 1. TrustedFrameworkPalmID.xml
-2. TrustedFrameworkExtensions.xml
+2. TrustedFrameworkPalmIDExtensions.xml
 3. SignInSignUpAndLinkPalmID.xml
 4. SignInWithIdTokenAndPalmIdVerify.xml
 
