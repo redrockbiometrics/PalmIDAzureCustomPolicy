@@ -91,6 +91,7 @@
       </InputClaims>
       <OutputClaims>
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+
         <!-- Pass throw requested trx_id -->
         <OutputClaim ClaimTypeReferenceId="trx_id" DefaultValue="{oauth-kv:trx_id}" AlwaysUseDefaultValue="true"/>
       </OutputClaims>
