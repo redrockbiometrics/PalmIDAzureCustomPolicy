@@ -180,6 +180,23 @@
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId-WithExtensionPalmIdUserId">
+          <InputClaims>
+          </InputClaims>
+          <OutputClaims>
+            <!-- Required claims -->
+            <OutputClaim ClaimTypeReferenceId="userIdentities" />
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" />
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
@@ -193,8 +210,8 @@
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
             <Item Key="UserMessageIfInvalidPassword">Your password is incorrect</Item>
             <Item Key="UserMessageIfOldPasswordUsed">Looks like you used an old password</Item>
-            <Item Key="ProviderName">https://auth.redrockbiometrics.com/</Item>
-            <Item Key="METADATA">https://auth.redrockbiometrics.com/agent/.well-known/openid-configuration</Item>
+            <Item Key="ProviderName">https://idp.palmid.com/</Item>
+            <Item Key="METADATA">https://idp.palmid.com/.well-known/openid-configuration</Item>
             <Item Key="response_types">code</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="scope">openid</Item>
@@ -215,7 +232,7 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
             <OutputClaim ClaimTypeReferenceId="authenticationSource" DefaultValue="socialIdpAuthentication" AlwaysUseDefaultValue="true" />
-            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="issuer" DefaultValue="idp.palmid.com" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="issuerUserId" PartnerClaimType="sub" />
             <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" PartnerClaimType="sub" />
           </OutputClaims>
@@ -236,7 +253,7 @@
           <InputClaims />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
-            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="auth.redrockbiometrics.com" AlwaysUseDefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="issuerToLink" DefaultValue="idp.palmid.com" AlwaysUseDefaultValue="true" />
             <OutputClaim ClaimTypeReferenceId="extension_palmIdUserId" PartnerClaimType="sub" />
           </OutputClaims>
           <OutputClaimsTransformations>
@@ -245,7 +262,7 @@
           </OutputClaimsTransformations>
           <IncludeTechnicalProfile ReferenceId="PalmID-OIDC-Base" />
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
-          <!-- The button will show up only when auth.redrockbiometrics.com is missing in issuers claim -->
+          <!-- The button will show up only when idp.palmid.com is missing in issuers claim -->
         </TechnicalProfile>
 
         <TechnicalProfile Id="PalmID-OIDC-Verify">
