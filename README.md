@@ -1,3 +1,4 @@
+# PalmIDAzureCustomPolicy
 # Tutorial for configuring PalmID OIDC with Azure Active Directory B2C
 
 In this tutorial, you will learn how to integrate Azure AD B2C authentication with PalmID. With PalmID your users can Sign In with their palm and use their palm as part of multi-factor authentication.
