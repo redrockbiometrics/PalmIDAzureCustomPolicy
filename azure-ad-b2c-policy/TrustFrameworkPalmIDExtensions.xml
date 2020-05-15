@@ -4,12 +4,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="redrockbiometricsdemo.onmicrosoft.com"
+  TenantId="yourtenant5.onmicrosoft.com"
   PolicyId="B2C_1A_TrustFrameworkPalmIDExtensions"
-  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_TrustFrameworkPalmIDExtensions">
+  PublicPolicyUri="http://yourtenant5.onmicrosoft.com/B2C_1A_TrustFrameworkPalmIDExtensions">
 
   <BasePolicy>
-    <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant5.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkPalmID</PolicyId>
   </BasePolicy>
 
@@ -19,8 +19,8 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="AAD-Common">
           <Metadata>
-            <Item Key="ApplicationObjectId">dcfcba49-812d-4949-b6c2-2355d8ece03d</Item>
-            <Item Key="ClientId">398329f9-c3fa-420f-9405-ba798b0caf11</Item>
+            <Item Key="ApplicationObjectId">AAD_EXTENSION_APPLICATION_OBJECT_ID</Item>
+            <Item Key="ClientId">AAD_EXTENSION_APPLICATION_OBJECT_ID</Item>
           </Metadata>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -31,7 +31,7 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="PalmID-OIDC-Base">
           <Metadata>
-            <Item Key="client_id">azureidp</Item>
+            <Item Key="client_id">PALMID_OIDC_CLIENT_ID</Item>
           </Metadata>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -42,28 +42,28 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="IdTokenHint_ExtractClaims">
           <Metadata>
-            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="METADATA">IDTOKENHINT_OIDC_CONFIGURATION</Item>
           </Metadata>
           <OutputClaims></OutputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
 
-    <ClaimsProvider>
-      <DisplayName>Local Account SignIn</DisplayName>
-      <TechnicalProfiles>
-        <TechnicalProfile Id="login-NonInteractive">
-          <Metadata>
-            <Item Key="client_id">0f3d7d58-218f-4fe3-baf5-108627fb83ed</Item>
-            <Item Key="IdTokenAudience">dd34b8b7-4b9a-42d2-a5e1-9628445cc2fd</Item>
-          </Metadata>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="0f3d7d58-218f-4fe3-baf5-108627fb83ed" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="dd34b8b7-4b9a-42d2-a5e1-9628445cc2fd" />
-          </InputClaims>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider>
+  <!--   <ClaimsProvider> -->
+  <!--     <DisplayName>Local Account SignIn</DisplayName> -->
+  <!--     <TechnicalProfiles> -->
+  <!--       <TechnicalProfile Id="login&#45;NonInteractive"> -->
+  <!--         <Metadata> -->
+  <!--           <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item> -->
+  <!--           <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item> -->
+  <!--         </Metadata> -->
+  <!--         <InputClaims> -->
+  <!--           <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" /> -->
+  <!--           <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" /> -->
+  <!--         </InputClaims> -->
+  <!--       </TechnicalProfile> -->
+  <!--     </TechnicalProfiles> -->
+  <!--   </ClaimsProvider> -->
   </ClaimsProviders>
 
 </TrustFrameworkPolicy>

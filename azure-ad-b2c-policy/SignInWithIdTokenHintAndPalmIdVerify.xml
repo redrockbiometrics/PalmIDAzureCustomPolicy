@@ -4,13 +4,13 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="redrockbiometricsdemo.onmicrosoft.com"
+  TenantId="yourtenant5.onmicrosoft.com"
   PolicyId="B2C_1A_signinwithidtoken_and_palmidverify"
-  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signinwithidtoken_and_palmidverify"
+  PublicPolicyUri="http://yourtenant5.onmicrosoft.com/B2C_1A_signinwithidtoken_and_palmidverify"
 >
 
   <BasePolicy>
-    <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant5.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkPalmIDExtensions</PolicyId>
   </BasePolicy>
 

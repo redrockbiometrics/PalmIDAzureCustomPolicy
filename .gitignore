@@ -1,5 +1,8 @@
 /node_modules
 .DS_Store
 
+/azure-custom-policy-vars
+/replace-azure-custom-policy-vars.sh
+/dist/azure-policy
 /.env
 

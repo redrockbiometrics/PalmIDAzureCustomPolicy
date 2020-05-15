@@ -3,12 +3,12 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId="redrockbiometricsdemo.onmicrosoft.com"
+  TenantId="yourtenant5.onmicrosoft.com"
   PolicyId="B2C_1A_TrustFrameworkPalmID"
-  PublicPolicyUri="http://redrockbiometricsdemo.onmicrosoft.com/B2C_1A_TrustFrameworkPalmID"
+  PublicPolicyUri="http://yourtenant5.onmicrosoft.com/B2C_1A_TrustFrameworkPalmID"
 >
   <BasePolicy>
-    <TenantId>redrockbiometricsdemo.onmicrosoft.com</TenantId>
+    <TenantId>yourtenant5.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
   <BuildingBlocks>
@@ -97,7 +97,7 @@
           <Protocol Name="None" />
           <Metadata>
             <!-- In example we use id_token from B2C_1A_signup_signin as id_token_hint -->
-            <Item Key="METADATA">https://redrockbiometricsdemo.b2clogin.com/redrockbiometricsdemo.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration</Item>
+            <Item Key="METADATA"></Item>
           </Metadata>
           <OutputClaims></OutputClaims>
         </TechnicalProfile>
