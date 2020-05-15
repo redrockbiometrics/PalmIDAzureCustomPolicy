@@ -42,7 +42,7 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="IdTokenHint_ExtractClaims">
           <Metadata>
-            <Item Key="METADATA">IDTOKENHINT_OIDC_CONFIGURATION</Item>
+            <Item Key="METADATA">IDTOKENHINT_OIDC_CONFIGURATION_URI</Item>
           </Metadata>
           <OutputClaims></OutputClaims>
         </TechnicalProfile>
