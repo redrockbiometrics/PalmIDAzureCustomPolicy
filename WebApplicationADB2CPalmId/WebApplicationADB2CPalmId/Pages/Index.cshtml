@@ -1,0 +1,19 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+
+<div>
+    <h1>PalmID Verification Demo</h1>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-primary" asp-page="Transaction" asp-route-id="trx324122">Transfer money</a>
+    }
+    else
+    {
+        <p>Sign In to perform action with the Palm verificaiton.</p>
+    }       
+</div>

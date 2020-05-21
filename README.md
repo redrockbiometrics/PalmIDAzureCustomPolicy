@@ -65,3 +65,8 @@ SignInSignUpAndLinkPalmID custom policy provides SignIn and SingUp workflows wit
 
 ### SignInWithIdTokenAndPalmIdVerify Policy
 SignInWithIdTokenAndPalmIdVerify custom policy uses id_token_hint to acquire user objectId and enables PalmID verification flow for a signed in user. This flow is designed for confirming sensitive transactions such as password change or money transfers. It assures that the signed-in user is physically present on the other end. If PalmID usage is limited to this flow, i.e., it is not used for sign in, it provides an additional MFA factor.
+
+
+### WebApplicationADB2CPalmId
+
+[Check out](WebApplicationADB2CPalmId/README.md) sample project to see how to use PalmID custom policies in a real application.
