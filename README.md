@@ -69,4 +69,4 @@ SignInWithIdTokenAndPalmIdVerify custom policy uses id_token_hint to acquire use
 
 ### WebApplicationADB2CPalmId
 
-[Check out](WebApplicationADB2CPalmId/README.md) sample project to see how to use PalmID custom policies in a real application.
+Check out a [sample project](WebApplicationADB2CPalmId/README.md) to see how the PalmID custom policies are being used in a real application.
