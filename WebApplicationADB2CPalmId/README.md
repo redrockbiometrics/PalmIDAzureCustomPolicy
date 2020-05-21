@@ -28,8 +28,10 @@ user's identity verification with PalmID.
 
 ## Notes
 
-1. To perform verification sample defines second "VerifyPolicy" OpenIDConnect authentication scheme, 
-   which uses id_token acquired from the Sign In as `id_token_hint` 
-   for `B2C_1A_signinwithidtoken_and_palmidverify` policy. See [Startup.cs](WebApplicationADB2CPalmId/Startup.cs).
-2. Transaction page contains code to check if user is logged in and if the current transaction is verified. 
+1. To perform verification, the sample project defines a second "VerifyPolicy" OpenIDConnect
+   authentication scheme, which uses id_token acquired from the Sign In as `id_token_hint` for
+   `B2C_1A_signinwithidtoken_and_palmidverify` policy.
+   See [Startup.cs](WebApplicationADB2CPalmId/Startup.cs).
+2. The transaction page contains the code for checking whether a user is logged in and
+   whether the current transaction is verified. 
    See [Transaction.cshtml.cs](WebApplicationADB2CPalmId/Pages/Transaction.cshtml.cs).
