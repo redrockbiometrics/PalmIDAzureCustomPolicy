@@ -31,7 +31,6 @@ module.exports = env => {
       contentBase: path.join(__dirname, 'dist'),
       compress: true,
       historyApiFallback: true,
-      
     },
     module: {
       rules: [
@@ -45,6 +44,10 @@ module.exports = env => {
             'style-loader',
             'css-loader',
           ],
+        },
+        {
+          test: /\.(?:png|jpg|svg)$/,
+          loader: 'file-loader',
         },
         {
           test: /\.vue$/,

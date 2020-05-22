@@ -6,3 +6,59 @@ body {
 	display: flex;
 	align-items: center;
 }
+
+.home-yellow {
+	background: #ffd873;
+	padding-top: 2em;
+}
+
+.home-image {
+	background: url(../img/home.png) bottom center no-repeat;
+	background-size: contain;
+}
+
+.logged .home-image {
+	background-image: url(../img/hand-ok.png);
+}
+.btn {
+	padding: 1rem 0 !important;
+	text-transform: uppercase;
+	margin-bottom: 0.625rem;
+}
+
+.btn-dark {
+	background: #000!important;
+}
+
+.home-text {
+	padding-bottom: 0.5em !important;
+}
+
+h3 {
+	font-size: 1.75rem;
+	margin-top: 1em!important;
+}
+
+.home-transaction h3 {
+	margin-bottom: 1em;
+}
+.home-text, .home-btn, .home-transaction {
+	padding: 1.5rem;
+}
+
+.home h1 {
+	font-size: 3.4375em;
+}
+.home p {
+	font-size: 1.75em;
+}
+
+.home-btn button {
+	display: block;
+}
+
+@media (min-width: 576px) {
+	.home-text, .home-btn, .home-transaction {
+		padding: 3.125rem !important;
+	}
+}

@@ -80,8 +80,6 @@ const routes = [
     },
 
     beforeEnter: (to, from, next) => {
-      console.log(approveOidc && approveOidc.userProfile);
-      console.log(loginOidc && loginOidc.userProfile);
       if (
         approveOidc.isAuthenticated
         && to.params.id === approveOidc.userProfile.trx_id
@@ -124,7 +122,7 @@ loginOidc.startup().then(ok => {
     new Vue({
       router,
       template: `
-        <div id="app" class="container">
+        <div id="app" class="container-fluid h-100">
           <router-view class="view"></router-view>
         </div>
       `,
