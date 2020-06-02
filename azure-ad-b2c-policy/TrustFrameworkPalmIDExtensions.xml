@@ -20,7 +20,7 @@
         <TechnicalProfile Id="AAD-Common">
           <Metadata>
             <Item Key="ApplicationObjectId">AAD_EXTENSION_APPLICATION_OBJECT_ID</Item>
-            <Item Key="ClientId">AAD_EXTENSION_APPLICATION_OBJECT_ID</Item>
+            <Item Key="ClientId">AAD_EXTENSION_CLIENT_ID</Item>
           </Metadata>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -49,21 +49,48 @@
       </TechnicalProfiles>
     </ClaimsProvider>
 
-  <!--   <ClaimsProvider> -->
-  <!--     <DisplayName>Local Account SignIn</DisplayName> -->
-  <!--     <TechnicalProfiles> -->
-  <!--       <TechnicalProfile Id="login&#45;NonInteractive"> -->
-  <!--         <Metadata> -->
-  <!--           <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item> -->
-  <!--           <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item> -->
-  <!--         </Metadata> -->
-  <!--         <InputClaims> -->
-  <!--           <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" /> -->
-  <!--           <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" /> -->
-  <!--         </InputClaims> -->
-  <!--       </TechnicalProfile> -->
-  <!--     </TechnicalProfiles> -->
-  <!--   </ClaimsProvider> -->
+    <ClaimsProvider>
+      <DisplayName>Local Account SignIn</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="login-NonInteractive">
+          <Metadata>
+            <Item Key="client_id">ProxyIdentityExperienceFrameworkAppId</Item>
+            <Item Key="IdTokenAudience">IdentityExperienceFrameworkAppId</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="ProxyIdentityExperienceFrameworkAppId" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="IdentityExperienceFrameworkAppId" />
+          </InputClaims>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Facebook</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="Facebook-OAUTH-Base">
+          <Metadata>
+            <Item Key="client_id">facebook_clientid</Item>
+            <Item Key="scope">email public_profile</Item>
+            <Item Key="ClaimsEndpoint">https://graph.facebook.com/me?fields=id,first_name,last_name,name,email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Microsoft Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="MSA-OIDC-Base">
+          <Metadata>
+            <Item Key="client_id">msa_clientid</Item>
+            <Item Key="IdTokenAudience">msa_clientid</Item>
+            <Item Key="scope">openid profile email</Item>
+          </Metadata>
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
   </ClaimsProviders>
 
 </TrustFrameworkPolicy>
