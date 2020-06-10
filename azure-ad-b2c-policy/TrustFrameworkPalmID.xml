@@ -87,6 +87,39 @@
         </InputParameters>
       </ClaimsTransformation>
     </ClaimsTransformations>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.error">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/exception.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.idpselections">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/idpSelector.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.idpselections.signup">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/idpSelector.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.signuporsignin">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/unified.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.selfasserted">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/selfAsserted.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.selfasserted.profileupdate">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/updateProfile.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.localaccountsignup">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/selfAsserted.html</LoadUri>
+      </ContentDefinition>
+
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/selfAsserted.html</LoadUri>
+      </ContentDefinition>
+    </ContentDefinitions>
   </BuildingBlocks>
   <ClaimsProviders>
     <ClaimsProvider>

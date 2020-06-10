@@ -4,5 +4,6 @@
 /azure-custom-policy-vars
 /replace-azure-custom-policy-vars.sh
 /dist/azure-policy
+/dist/__azure-base-repo
 /.env
 
