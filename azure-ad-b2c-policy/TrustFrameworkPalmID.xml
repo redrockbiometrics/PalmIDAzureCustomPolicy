@@ -13,6 +13,14 @@
   </BasePolicy>
   <BuildingBlocks>
     <ClaimsSchema>
+      <ClaimType Id="givenName">
+        <DisplayName>First Name</DisplayName>
+      </ClaimType>
+
+      <ClaimType Id="surname">
+        <DisplayName>Last Name</DisplayName>
+      </ClaimType>
+
       <ClaimType Id="palmIdUserIdVerifiedBy">
         <DisplayName>palmIdUserIdVerifiedBy</DisplayName>
         <DataType>string</DataType>
@@ -233,11 +241,11 @@
       </TechnicalProfiles>
     </ClaimsProvider>
     <ClaimsProvider>
-      <DisplayName>Sign in with PalmID</DisplayName>
+      <DisplayName>PalmID Biometrics</DisplayName>
       <TechnicalProfiles>
         <!-- Write extension_palmIdUserId into user claims -->
         <TechnicalProfile Id="PalmID-OIDC-Base">
-          <DisplayName>Sign in with PalmID</DisplayName>
+          <DisplayName>PalmID Biometrics</DisplayName>
           <Protocol Name="OpenIdConnect" />
           <Metadata>
             <Item Key="UserMessageIfClaimsPrincipalDoesNotExist">We can't seem to find your account</Item>
@@ -260,7 +268,7 @@
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-SocialLogin" />
         </TechnicalProfile>
         <TechnicalProfile Id="PalmID-OIDC">
-          <DisplayName>Sign in with PalmID</DisplayName>
+          <DisplayName>PalmID Biometrics</DisplayName>
           <InputClaims></InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="displayName" PartnerClaimType="name" />
@@ -282,7 +290,7 @@
 
         <!-- This is the technical profile used to link with PalmID account -->
         <TechnicalProfile Id="PalmID-OIDC-Link">
-          <DisplayName>Link PalmID</DisplayName>
+          <DisplayName>PalmID Biometrics</DisplayName>
           <InputClaims />
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="issuerUserIdToLink" PartnerClaimType="sub" />
