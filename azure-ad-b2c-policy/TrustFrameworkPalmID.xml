@@ -100,6 +100,16 @@
         <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/exception.html</LoadUri>
       </ContentDefinition>
 
+      <ContentDefinition Id="api.idpselections.link">
+        <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/idpSelector.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:idpselection:1.0.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Idp selection page</Item>
+          <Item Key="language.intro">Link account</Item>
+        </Metadata>
+      </ContentDefinition>
+
       <ContentDefinition Id="api.idpselections">
         <LoadUri>https://idp.palmid.com/azure-ad-b2c-tpls/ocean_blue/idpSelector.html</LoadUri>
       </ContentDefinition>

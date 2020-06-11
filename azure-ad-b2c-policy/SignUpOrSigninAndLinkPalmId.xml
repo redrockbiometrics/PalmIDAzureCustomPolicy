@@ -81,7 +81,7 @@
           </ClaimsExchanges>
         </OrchestrationStep>
 
-        <OrchestrationStep Order="6" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
+        <OrchestrationStep Order="6" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections.link">
           <Preconditions>
             <Precondition Type="ClaimsExist" ExecuteActionsIf="true">
               <Value>extension_palmIdUserId</Value>
