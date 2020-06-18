@@ -25,31 +25,25 @@ The following instructions are based on the workflows described in this tutoria
 
 ### 1. Set up custom policies for account linking
 
-Make sure that you meet the last of the Prerequisites in the tutorial to configure a Facebook application. It will be used for testing at an intermediate step and then abandoned.
+Download custom policies from this [sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking).
 
-Complete “Add signing and encryption keys” section.
+Follow the steps as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications) to set it up.
 
-Complete “Register Identity Experience Framework applications” section.
-
-In “Custom policy starter pack” section, instead of the starter pack download the advanced pack from this sample repository.
-
-In the “Upload the policies” section, upload the first 3 files:
-  a.	TrustFrameworkBase.xml
-  b.	TrustFrameworkExtensions.xml
-  c.	SignUpOrSignin.xml
-
-The test described in “Test the custom policy” section must pass.
-
-????     Do they need to “Add Facebook as an identity provider”     ????
-
-
-Download custom policies from this [sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking) and follow the steps as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications) to set it up.
+1. Complete “Add signing and encryption keys” section.
+1. Complete “Register Identity Experience Framework applications” section.
+1. In “Custom policy starter pack” section, instead of the starter pack use the [account-linking sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking) from [advanced policies  repository](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies) downloaded earlier.
+1. In the “Upload the policies” section, upload the first 3 files:
+  *	TrustFrameworkBase.xml
+  *	TrustFrameworkExtensions.xml
+  *	SignUpOrSignin.xml
+1. The test described in “Test the custom policy” section must pass.
+1. Skip "Add Facebook as an identity provider" section
 
 ### 2. Download PalmID custom policy files
-Download XML files from this [azure-ad-b2c-policy](./azure-ad-b2c-policy) folder and copy them next to the policy files downloaded at the previous step.
+Download XML files from this [azure-ad-b2c-policy folder](./azure-ad-b2c-policy).
 
 ### 3. Edit TrustFrameworkPalmIDExtension.xml
-Obtain the application identifiers Application ID and Application Object ID as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom-attributes).
+Obtain the application identifiers Application ID and Application Object ID as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom-attributes#get-the-application-properties).
 
 Replace `AAD_EXTENSION_APPLICATION_OBJECT_ID` with `Application Object ID`.
 
@@ -57,9 +51,9 @@ Replace `AAD_EXTENSION_CLIENT_ID with` `Application ID`.
 
 Replace `PALMID_OIDC_CLIENT_ID` with PalmID OIDC `client_id`.
 
-Replace `IDTOKENHINT_OIDC_CONFIGURATION_URI` with the id_token_jint OpenIDConnect configuration URI in TrustFrameworkPalmIDExtension.xml:
+Replace `IDTOKENHINT_OIDC_CONFIGURATION_URI` with the `id_token_hint` OpenIDConnect configuration URI in TrustFrameworkPalmIDExtension.xml:
 
-**Tip:** _You can use id_token from the SignInSignUpAndLinkPalmID policy as id_token_hint for SignInWithIdTokenAndPalmIdVerify policy and use https://yourtenant5.b2clogin.com/yourtenant5.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration as IDTOKENHINT_OIDC_CONFIGURATION_URI. (Don't forget to replace yourtenant5 with your azure tenant domain name)._
+**Tip:** _You can use id_token from the `signin_singup_palmid` policy as id_token_hint for SignInWithIdTokenAndPalmIdVerify policy for testing purporses. To do that use https://yourtenant5.b2clogin.com/yourtenant5.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration as IDTOKENHINT_OIDC_CONFIGURATION_URI. (Don't forget to replace yourtenant5 with your azure tenant domain name)._
 
 ### 4. Create the PalmID key
 
@@ -89,18 +83,15 @@ upload 4 additional:
 There should be 7 files total.
 
 ### 6. Test policy
-Complete “Test the custom policy” section from the tutorial. It must pass.
-
-??? Should PalmID de added as an identity provider as described in the tutorial? ????
-
+Use ["Test the custom policy" tutorial section](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications#test-the-custom-policy) to test `signup_signin_palmid` policy.
 
 ## Usage
 
-### SignInSignUpAndLinkPalmID Policy
-SignInSignUpAndLinkPalmID custom policy provides SignIn and SingUp workflows with mandatory linking PalmID Account to AAD user.
+### signup_signin_palmid Policy
+`signup_signin_palmid` custom policy provides SignIn and SingUp workflows with mandatory linking PalmID Account to AAD user.
 
-### SignInWithIdTokenAndPalmIdVerify Policy
-SignInWithIdTokenAndPalmIdVerify custom policy uses id_token_hint to acquire user objectId and enables PalmID verification flow for a signed in user. This flow is designed for confirming sensitive transactions such as password change or money transfers. It assures that the signed-in user is physically present on the other end. If PalmID usage is limited to this flow, i.e., it is not used for sign in, it provides an additional MFA factor.
+### signinwithidtoken_and_palmidverify Policy
+`signinwithidtoken_and_palmidverify` custom policy uses id_token_hint to acquire user objectId and enables PalmID verification flow for a signed in user. This flow is designed for confirming sensitive transactions such as password change or money transfers. It assures that the signed-in user is physically present on the other end. If PalmID usage is limited to this flow, i.e., it is not used for sign in, it provides an additional MFA factor.
 
 
 ### WebApplicationADB2CPalmId
