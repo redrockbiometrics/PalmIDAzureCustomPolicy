@@ -4,27 +4,49 @@ In this tutorial you will learn how to make PalmID IDP a trusted Identity Provid
 
 ## Prerequisites
 1. Familiarity with Azure AD B2C Custom policies described in [Azure AD B2C Get Started with Custom Policies](https://aka.ms/ief)
-1. Familiarity with the id_token_hint usage described in this  [sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite)
+1. Familiarity with the id_token_hint usage described in this [sample](https://github.com/azure-ad-b2c/samples/tree/master/policies/invite). This token is needed for passing user_id to PalmID IDP using OpenID Connect protocol.  
 1. If you don't have one already, [create an Azure AD B2C tenant](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant) that is linked to your Azure subscription.
-1. [Register your application](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications) in the tenant that you created so that it can communicate with Azure AD B2C.
+1. [Register your web application](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications) in the tenant that you created so that it can communicate with Azure AD B2C.
 
 ## Onboarding with PalmID
 
-1. Go to [PalmID](https://idp.palmid.com)
-1. Download PalmID Agent for your mobile phone
-1. Open PalmID Agent and scan QR Code
-1. Follow the instructions and enroll new user
-1. Press "OIDC Client" button after the login screen and fill the form
-1. Save `client_id` and `client_secret`
+1. Install PalmID Agent app on your mobile phone [(iOS)](https://apps.apple.com/us/app/id1513464087)
+1. Start the PalmID Agent app, follow the instructions, and enroll yourself as a new user
+1. On your PC, follow the [PalmID IDP link](https://idp.palmid.com); you will get a screen with QR code
+1. Open PalmID Agent app on your phone and scan the QR Code
+1. Now you own a personal OIDC Client manager account and can get OIDC Client credentials required for integration.
+1. Press "OIDC Client" button below “Hello!”. fill the form, and press “Save” button.
+1. Save client_id and client_secret. You will need them later.
+
 
 ## Configuring PalmID with Azure AD B2C
 
+The following instructions are based on the workflows described in this tutorial.
 
 ### 1. Set up custom policies for account linking
+
+Make sure that you meet the last of the Prerequisites in the tutorial to configure a Facebook application. It will be used for testing at an intermediate step and then abandoned.
+
+Complete “Add signing and encryption keys” section.
+
+Complete “Register Identity Experience Framework applications” section.
+
+In “Custom policy starter pack” section, instead of the starter pack download the advanced pack from this sample repository.
+
+In the “Upload the policies” section, upload the first 3 files:
+  a.	TrustFrameworkBase.xml
+  b.	TrustFrameworkExtensions.xml
+  c.	SignUpOrSignin.xml
+
+The test described in “Test the custom policy” section must pass.
+
+????     Do they need to “Add Facebook as an identity provider”     ????
+
+
 Download custom policies from this [sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking) and follow the steps as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications) to set it up.
 
 ### 2. Download PalmID custom policy files
-Download XML files from this [azure-ad-b2c-policy](./azure-ad-b2c-policy) folder.
+Download XML files from this [azure-ad-b2c-policy](./azure-ad-b2c-policy) folder and copy them next to the policy files downloaded at the previous step.
 
 ### 3. Edit TrustFrameworkPalmIDExtension.xml
 Obtain the application identifiers Application ID and Application Object ID as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-custom-attributes).
@@ -41,7 +63,7 @@ Replace `IDTOKENHINT_OIDC_CONFIGURATION_URI` with the id_token_jint OpenIDConnec
 
 ### 4. Create the PalmID key
 
-Add your PalmID client_secret as a policy key.
+Add your PalmID client_secret as a policy key. This task is similar to the task “Create the encryption key” in the section “Add signing and encryption keys” from the tutorial.
 
 1. Select Policy Keys and then select Add.
 2. For Options, choose Manual.
@@ -50,13 +72,27 @@ Add your PalmID client_secret as a policy key.
 5. For Key usage, select Signature.
 6. Select Create.
 
+### 5. Upload files
 
-### 6. Upload files
-Upload files
+This task repeats the “Upload the policies” section from the tutorial. In addition to already uploaded files:
+a.	TrustFrameworkBase.xml
+b.	TrustFrameworkExtensions.xml
+c.	SignUpOrSignin.xml
+
+upload 4 additional: 
+
 1. TrustedFrameworkPalmID.xml
 2. TrustedFrameworkPalmIDExtensions.xml
 3. SignInSignUpAndLinkPalmID.xml
 4. SignInWithIdTokenAndPalmIdVerify.xml
+
+There should be 7 files total.
+
+### 6. Test policy
+Complete “Test the custom policy” section from the tutorial. It must pass.
+
+??? Should PalmID de added as an identity provider as described in the tutorial? ????
+
 
 ## Usage
 
