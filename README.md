@@ -53,7 +53,7 @@ Replace `PALMID_OIDC_CLIENT_ID` with PalmID OIDC `client_id`.
 
 Replace `IDTOKENHINT_OIDC_CONFIGURATION_URI` with the `id_token_hint` OpenIDConnect configuration URI in TrustFrameworkPalmIDExtension.xml:
 
-**Tip:** _You can use id_token from the `signin_singup_palmid` policy as id_token_hint for SignInWithIdTokenAndPalmIdVerify policy for testing purporses. To do that use https://yourtenant5.b2clogin.com/yourtenant5.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration as IDTOKENHINT_OIDC_CONFIGURATION_URI. (Don't forget to replace yourtenant5 with your azure tenant domain name)._
+**Tip:** _You can use id_token from the `B2C_1A_signin_singup_palmid` policy as id_token_hint for B2C_1A_signinwithidtoken_and_palmidverify policy for testing purporses. To do that use https://yourtenant5.b2clogin.com/yourtenant5.onmicrosoft.com/B2C_1A_signup_signin_palmid/v2.0/.well-known/openid-configuration as IDTOKENHINT_OIDC_CONFIGURATION_URI. (Don't forget to replace yourtenant5 with your azure tenant domain name)._
 
 ### 4. Create the PalmID key
 
@@ -83,15 +83,15 @@ upload 4 additional:
 There should be 7 files total.
 
 ### 6. Test policy
-Use ["Test the custom policy" tutorial section](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications#test-the-custom-policy) to test `signup_signin_palmid` policy.
+Use ["Test the custom policy" tutorial section](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications#test-the-custom-policy) to test `B2C_1A_signup_signin_palmid` policy.
 
 ## Usage
 
-### signup_signin_palmid Policy
-`signup_signin_palmid` custom policy provides SignIn and SingUp workflows with mandatory linking PalmID Account to AAD user.
+### B2C_1A_signup_signin_palmid Policy
+`B2C_1A_signup_signin_palmid` custom policy provides SignIn and SingUp workflows with mandatory linking PalmID Account to AAD user.
 
-### signinwithidtoken_and_palmidverify Policy
-`signinwithidtoken_and_palmidverify` custom policy uses id_token_hint to acquire user objectId and enables PalmID verification flow for a signed in user. This flow is designed for confirming sensitive transactions such as password change or money transfers. It assures that the signed-in user is physically present on the other end. If PalmID usage is limited to this flow, i.e., it is not used for sign in, it provides an additional MFA factor.
+### B2C_1A_signinwithidtoken_and_palmidverify Policy
+`B2C_1A_signinwithidtoken_and_palmidverify` custom policy uses id_token_hint to acquire user objectId and enables PalmID verification flow for a signed in user. This flow is designed for confirming sensitive transactions such as password change or money transfers. It assures that the signed-in user is physically present on the other end. If PalmID usage is limited to this flow, i.e., it is not used for sign in, it provides an additional MFA factor.
 
 
 ### WebApplicationADB2CPalmId
