@@ -25,17 +25,25 @@ The following instructions are based on the workflows described in this tutoria
 
 ### 1. Set up custom policies for account linking
 
-Download custom policies from this [sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking).
-
 Follow the steps as described in this [tutorial](https://docs.microsoft.com/en-us/azure/active-directory-b2c/custom-policy-get-started?tabs=applications) to set it up.
 
 1. Complete “Add signing and encryption keys” section.
 1. Complete “Register Identity Experience Framework applications” section.
-1. In “Custom policy starter pack” section, instead of the starter pack use the [account-linking sample](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/tree/master/account-linking) from [advanced policies  repository](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies) downloaded earlier.
-1. In the “Upload the policies” section, upload the first 3 files:
-  *	TrustFrameworkBase.xml
-  *	TrustFrameworkExtensions.xml
-  *	SignUpOrSignin.xml
+1. In “Get the starter pack” section, instead of the `starter pack` use the `account-linking` sample from [advanced policies  repository](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies).
+   * [Download the .zip file](https://github.com/Azure-Samples/active-directory-b2c-advanced-policies/archive/master.zip) or clone the repository:
+   ```
+   git clone https://github.com/Azure-Samples/active-directory-b2c-advanced-policies
+   ```
+   * In all of the files in the account-linking directory, replace the string yourtenant5 with the name of your Azure AD B2C tenant.
+   
+   For example, if the name of your B2C tenant is contosotenant, all instances of yourtenant5.onmicrosoft.com become contosotenant.onmicrosoft.com.
+   
+1. Complete "Add application IDs to the custom policy" section
+   
+1. In the “Upload the policies” section, upload the first 3 files from edited `account-linking` folder:
+   *	TrustFrameworkBase.xml
+   *	TrustFrameworkExtensions.xml
+   *	SignUpOrSignin.xml
 1. The test described in “Test the custom policy” section must pass.
 1. Skip "Add Facebook as an identity provider" section
 
@@ -69,12 +77,11 @@ Add your PalmID client_secret as a policy key. This task is similar to the task 
 ### 5. Upload files
 
 This task repeats the “Upload the policies” section from the tutorial. In addition to already uploaded files:
-a.	TrustFrameworkBase.xml
-b.	TrustFrameworkExtensions.xml
-c.	SignUpOrSignin.xml
+1.	TrustFrameworkBase.xml
+1.	TrustFrameworkExtensions.xml
+1.	SignUpOrSignin.xml
 
 upload 4 additional: 
-
 1. TrustedFrameworkPalmID.xml
 2. TrustedFrameworkPalmIDExtensions.xml
 3. SignInSignUpAndLinkPalmID.xml
