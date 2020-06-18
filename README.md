@@ -12,7 +12,7 @@ In this tutorial you will learn how to make PalmID IDP a trusted Identity Provid
 
 1. Install PalmID Agent app on your mobile phone [(iOS)](https://apps.apple.com/us/app/id1513464087).
 1. Start the PalmID Agent app, follow the instructions, and enroll yourself as a new user.
-1. On your PC, follow the [PalmID IDP link](https://idp.palmid.com); you will land on a screen with a QR code.
+1. On your PC, follow the [PalmID IDP link](https://idp.palmid.com) and press "Partner Login" button; you will land on a screen with a QR code.
 1. Open PalmID Agent app on your phone and scan the QR Code.
 1. Now you are a registered OIDC Client manager. In your account you will be provided with OIDC Client credentials required for integration.
 1. Press `OIDC Client` button below “Hello!”, fill the form, and press `Save` button.
