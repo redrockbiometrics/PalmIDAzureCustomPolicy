@@ -21,7 +21,7 @@ user's identity verification with PalmID.
 
 ## Demo
 
-1. Click "Sign In" link and sing in with the Azure.
+1. Click "Sign In" link and sign in with the Azure.
 2. On the Homepage you will see "Transfer money" button, this an example of the action
    that requires user to be verified before he proceeds, see sources of [Transaction page](WebApplicationADB2CPalmId/Pages/Transaction.cshtml.cs).
 3. After "Transfer money" click you will be redirected to Azure to verify your identity with the PalmID.
